@@ -8,17 +8,25 @@ export default function Home({ user }) {
 
     const foodAPIKey = 'DCK9u4QpZYgG_6NY4t0s3RDbsaUb7_gveVbluyB3yVo'
 
-    const addVeggie = (event) => {
+    const addVeggie = async (event) => {
         event.preventDefault()
         const v = event.target.vegatable.value
 
+        const url = `https://api.unsplash.com/search/photos?query=${v}&per_page=20&client_id=${foodAPIKey}`
+        const res = await fetch(url)
+        const data = await res.json()
+
+        console.log(data)
+
+          
         const copy = { ...veggies };
         if (v in copy) {
             copy[v][0]++
         }
         else {
-            copy[v] = [1, '']
+            copy[v] = [1, '', `${data.results[0].urls.full}`]
         }
+
 
         setVeggies(copy)
 
@@ -95,14 +103,6 @@ export default function Home({ user }) {
         addToDB(veggies)
     }
 
-    // const searchFood = async () => {
-    //     const url = `https://api.unsplash.com/search/photos/page=1&query=office&client_id=${foodAPIKey}`
-    //     const res = await fetch(url)
-    //     const data = await res.json()
-
-    //     console.log(data)
-    // }
-
 
     useEffect(() => {
         getVeggies()
@@ -119,35 +119,35 @@ export default function Home({ user }) {
                     {user.uid ? <>
                         <form className='col-4' onSubmit={addVeggie}>
                             <input className='form-control' name="vegatable" placeholder="Vegatable" />
-                            <button type='submit' className='btn btn-primary my-3'>Add Veggie</button>
+                            <button type='submit' className='btn my-3'>Add Veggie</button>
                         </form></> : <></>
                     }
                 </div>
 
                 <div className='row d-flex justify-content-center'>
-                    {info.map(n => <><div className="card" style={{ width: '18rem' }}>
-                        <div className="card-body">
+                    {info.map(n => <><div className="card p-0 mx-3 my-3" style={{ width: '18rem' }}>
+                        <div className="card-body p-0">
+                            <img className='card-img mb-3' src={n[1][2]}/>
                             <h5 className="card-title">{n[0]}</h5>
                             <div className='d-flex justify-content-around'>
                                 <ul className="pagination">
-                                    <li className="page-item mx-2"><button onClick={() => { removeOneVeggie(n[0]) }}>-</button></li>
+                                    <li className="page-item mx-2"><button className='btn' onClick={() => { removeOneVeggie(n[0]) }}>-</button></li>
                                     <li className="page-item mx-2"><h5>{n[1][0]}</h5></li>
-                                    <li className="page-item mx-2"><button onClick={() => { addOneVeggie(n[0]) }}>+</button></li>
+                                    <li className="page-item mx-2"><button className='btn' onClick={() => { addOneVeggie(n[0]) }}>+</button></li>
                                 </ul>
                             </div>
 
-                            <div className='my-5'>
+                            <div className='m-3'>
                                 {n[1][1]}
                             </div>
 
-                            <form onSubmit={addDescription}>
+                            <form className='mx-3' onSubmit={addDescription}>
                                 <input className='form-control' name="description" placeholder="Description of Harvest" />
-                                <button type='submit' className='btn btn-sm btn-primary my-3'>Add Description</button>
+                                <button type='submit' className='btn btn-sm my-3'>Add Description</button>
                                 <input className='hidden-form h-25 invisible' name="veggieComment" value={n[0]} disabled/>
-
                             </form>
 
-                            <button className='btn btn-sm btn-danger' onClick={() => { deleteVeggie(n[0]) }}>Delete Veggie</button>
+                            <button className='btn btn-sm mb-3' onClick={() => { deleteVeggie(n[0]) }}>Delete Veggie</button>
                         </div>
                     </div></>)}
                 </div>

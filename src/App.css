@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: serif !important;
+  font-weight: 400;
+  font-size: 20px;
+  background: rgb(168, 42, 190);
+  background: linear-gradient(90deg, rgb(156, 47, 175) 0%, rgb(214, 84, 237) 100%);
+}
+
+.btn{
+  background: rgb(24, 136, 24);
+  color: white;
+}
+
+.card{
+  border: 0px !important;
+}
