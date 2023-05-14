@@ -12,7 +12,17 @@ body {
   font-weight: 400;
   font-size: 20px;
   background: rgb(168, 42, 190);
-  background: linear-gradient(90deg, rgb(156, 47, 175) 0%, rgb(214, 84, 237) 100%);
+  background: linear-gradient(90deg, rgb(152, 33, 173) 0%, rgb(216, 121, 233) 100%);
+}
+
+h1, h3{
+  color: white;
+  text-align: center;
+  margin-top: 20vh;
+}
+
+a:hover{
+  cursor: pointer;
 }
 
 .btn{
@@ -20,6 +30,30 @@ body {
   color: white;
 }
 
+.label{
+  color: white;
+}
+
+.nav-link{
+  color: white;
+  text-decoration: none;
+}
+
 .card{
   border: 0px !important;
+}
+
+.card-img{
+  max-height: 25vh;
+  object-fit: cover;
+}
+
+.description{
+  min-height: 30px;
+}
+
+.fa-trash{
+  position: absolute;
+  margin: 5px;
+  color: red;
 }
