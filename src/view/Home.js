@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getDatabase, ref, set, onValue, remove } from "firebase/database";
+import Logo from '../components/photos/Harvest-Tracker-Logo.png'
 
 
 export default function Home({ user, info, setInfo, veggies, setVeggies, date, setDate, totalVeggies, setTotalVeggies, totalVeggieInfo, setTotalVeggieInfo }) {
@@ -132,6 +133,12 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
         addToDB(veggies)
     }
 
+    const getFirstName = () => {
+        const fullName = user.displayName
+
+        return fullName.split(' ')[0]
+    }
+
     const addDescription = (event) => {
         event.preventDefault()
         const d = event.target.description.value
@@ -175,35 +182,44 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
             {user.uid ? <>
                 <div className='container my-5 text-center'>
                     <div className='row d-flex justify-content-center'>
-                        <form className='col-2' onInput={changeDate}>
-                            {date ? <></> :
-                                <label className='label' for='date'>Select Harvest Date</label>
+                        {type === 0 ? <></> : <>
+                            <form className='col-2' onInput={changeDate}>
+                                {date ? <></> :
+                                    <label className='label' for='date'>Select Harvest Date</label>
+                                }
+                                <input className='form-control' id='date' type='date' name='date' />
+                            </form>
+
+                            {date ? <>
+                                <form className='col-4' onSubmit={addVeggie}>
+                                    <input className='form-control' name="vegatable" placeholder="Vegatable" />
+                                    <button type='submit' className='btn my-3 '>Add Veggie</button>
+                                </form></> : <></>
                             }
-                            <input className='form-control' id='date' type='date' name='date' />
-                        </form>
-                        {date ? <>
-                            <form className='col-4' onSubmit={addVeggie}>
-                                <input className='form-control' name="vegatable" placeholder="Vegatable" />
-                                <button type='submit' className='btn my-3'>Add Veggie</button>
-                            </form></> : <></>
+                        </>
                         }
-                        {type === 0 ?
-                            <button className='btn col-1' onClick={() => { setType(1) }}>Switch</button> :
-                            <button className='btn col-1' onClick={() => { setType(0) }}>Switch</button>
-                        }
+                        <div className='switch-type-btn my-3'>
+                            {type === 0 ?
+                                <button className='btn btn-sm  col-2' onClick={() => { setType(1) }}>Show Daily Harvest</button> :
+                                <button className='btn btn-sm  col-2' onClick={() => { setType(0) }}>Show Total Harvest</button>
+                            }
+                        </div>
                     </div>
 
                     <div className='row d-flex justify-content-center'>
                         {type === 1 ? <>
+                            {date ?
+                                <h1 className='my-3'>{getFirstName()}'s Harvest for {date}</h1> : <></>
+                            }
                             {info.map(n => <><div className="card p-0 mx-3 my-3" style={{ width: '18rem' }}>
                                 <div className="card-body p-0">
                                     <img className='card-img mb-3' src={n[1][2]} />
                                     <h5 className="card-title">{n[0]}</h5>
                                     <div className='d-flex justify-content-around'>
                                         <ul className="pagination d-flex align-items-center">
-                                            <li className="page-item mx-2"><button className='btn' onClick={() => { removeOneVeggie(n[0]) }}>-</button></li>
+                                            <li className="page-item mx-2"><button className='btn ' onClick={() => { removeOneVeggie(n[0]) }}>-</button></li>
                                             <li className="page-item mx-2"><h5>{n[1][0]}</h5></li>
-                                            <li className="page-item mx-2"><button className='btn' onClick={() => { addOneVeggie(n[0]) }}>+</button></li>
+                                            <li className="page-item mx-2"><button className='btn ' onClick={() => { addOneVeggie(n[0]) }}>+</button></li>
                                         </ul>
                                     </div>
 
@@ -216,47 +232,46 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
 
                                     <form className='mx-3' onSubmit={addDescription}>
                                         <input className='form-control' name="description" placeholder="Description of Harvest" />
-                                        <button type='submit' className='btn btn-sm my-3'>Add Description</button>
+                                        <button type='submit' className='btn btn-sm mt-3 w-100'>Add Description</button>
                                         <input className='hidden-form h-25 invisible' name="veggieComment" value={n[0]} disabled />
                                     </form>
 
-                                    <button className='btn btn-sm mb-3' onClick={() => { deleteVeggie(n[0]) }}>Delete Veggie</button>
+                                    <button className='btn btn-sm mb-3 delete-btn' onClick={() => { deleteVeggie(n[0]) }}>Delete Veggie</button>
                                 </div>
                             </div></>)}
                         </> : <>
+                            <h1 className='my-3'>{getFirstName()}'s Total Harvest</h1>
                             {totalVeggieInfo.map(n => <><div className="card p-0 mx-3 my-3" style={{ width: '18rem' }}>
                                 <div className="card-body p-0">
                                     <img className='card-img mb-3' src={n[1][2]} />
                                     <h5 className="card-title">{n[0]}</h5>
                                     <div className='d-flex justify-content-around'>
                                         <ul className="pagination d-flex align-items-center">
-                                            <li className="page-item mx-2"><button className='btn' onClick={() => { removeOneVeggie(n[0]) }}>-</button></li>
-                                            <li className="page-item mx-2"><h5>{n[1][0]}</h5></li>
-                                            <li className="page-item mx-2"><button className='btn' onClick={() => { addOneVeggie(n[0]) }}>+</button></li>
+                                            {/* <li className="page-item mx-2"><button className='btn ' onClick={() => { removeOneVeggie(n[0]) }}>-</button></li> */}
+                                            <li className="page-item mx-2"><p>Quantity:  {n[1][0]}</p></li>
+                                            {/* <li className="page-item mx-2"><button className='btn ' onClick={() => { addOneVeggie(n[0]) }}>+</button></li> */}
                                         </ul>
                                     </div>
 
-                                    <div className='description m-3'>
+                                    {/* <div className='description m-3'>
                                         {n[1][1]}
-                                        {n[1][1] != " " ?
-                                            <a onClick={() => { deleteDescription(n[0]) }}><i class="fa-solid fa-trash"></i></a> : <></>
-                                        }
-                                    </div>
+                                    </div> */}
 
-                                    <form className='mx-3' onSubmit={addDescription}>
+                                    {/* <form className='mx-3' onSubmit={addDescription}>
                                         <input className='form-control' name="description" placeholder="Description of Harvest" />
-                                        <button type='submit' className='btn btn-sm my-3'>Add Description</button>
+                                        <button type='submit' className='btn btn-sm mt-3 w-100'>Add Description</button>
                                         <input className='hidden-form h-25 invisible' name="veggieComment" value={n[0]} disabled />
-                                    </form>
+                                    </form> */}
 
-                                    <button className='btn btn-sm mb-3' onClick={() => { deleteVeggie(n[0]) }}>Delete Veggie</button>
                                 </div>
                             </div></>)}
                         </>}
                     </div>
                 </div></> : <>
-                <h1>Welcome to the Happy Harvest Tracker!</h1>
-                <h3>Please log in to continue.</h3>
+                <div className='d-flex justify-content-center'>
+                    <img className='home-logo' src={Logo} />
+                </div>
+                {/* <h3>Please log in to continue.</h3> */}
             </>}
         </>
     )

@@ -8,30 +8,50 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: serif !important;
+  font-family: 'Oswald', serif !important;
   font-weight: 400;
   font-size: 20px;
   background: rgb(168, 42, 190);
-  background: linear-gradient(90deg, rgb(152, 33, 173) 0%, rgb(216, 121, 233) 100%);
+  background: linear-gradient(90deg, rgb(56, 132, 47) 0%,rgb(152, 157, 14) 50% , rgb(163, 113, 31) 100%);
+}
+
+.home-logo{
+  margin-top: 25vh;
+  max-width: 80vw;
 }
 
 h1, h3{
   color: white;
+  font-weight: 700;
   text-align: center;
   margin-top: 20vh;
 }
 
 a:hover{
   cursor: pointer;
+  color:rgb(24, 136, 24) !important;
 }
 
 .btn{
-  background: rgb(24, 136, 24);
+  background: rgb(23, 46, 150);
   color: white;
+}
+
+.btn:hover{
+  background: rgb(16, 35, 116) !important;
+  color: white;
+}
+
+.delete-btn:hover{
+  background: rgb(193, 16, 16) !important;
 }
 
 .label{
   color: white;
+}
+
+.navbar-brand{
+  width: 15vw;
 }
 
 .nav-link{
@@ -41,6 +61,7 @@ a:hover{
 
 .card{
   border: 0px !important;
+  background: rgb(243, 243, 243);
 }
 
 .card-img{
