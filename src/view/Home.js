@@ -5,7 +5,7 @@ import Logo from '../components/photos/Harvest-Tracker-Logo.png'
 
 export default function Home({ user, info, setInfo, veggies, setVeggies, date, setDate, totalVeggies, setTotalVeggies, totalVeggieInfo, setTotalVeggieInfo }) {
 
-    const foodAPIKey = 'DCK9u4QpZYgG_6NY4t0s3RDbsaUb7_gveVbluyB3yVo'
+    const foodAPIKey = process.env.UNSPLASH_API_KEY
 
     const [type, setType] = useState(1)
 
@@ -183,7 +183,7 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
                 <div className='container my-5 text-center'>
                     <div className='row d-flex justify-content-center'>
                         {type === 0 ? <></> : <>
-                            <form className='col-2' onInput={changeDate}>
+                            <form className='col-2 select-date' onInput={changeDate}>
                                 {date ? <></> :
                                     <label className='label' for='date'>Select Harvest Date</label>
                                 }
@@ -191,7 +191,7 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
                             </form>
 
                             {date ? <>
-                                <form className='col-4' onSubmit={addVeggie}>
+                                <form className='col-4 add-veggie' onSubmit={addVeggie}>
                                     <input className='form-control' name="vegatable" placeholder="Vegatable" />
                                     <button type='submit' className='btn my-3 '>Add Veggie</button>
                                 </form></> : <></>
@@ -200,8 +200,8 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
                         }
                         <div className='switch-type-btn my-3'>
                             {type === 0 ?
-                                <button className='btn btn-sm  col-2' onClick={() => { setType(1) }}>Show Daily Harvest</button> :
-                                <button className='btn btn-sm  col-2' onClick={() => { setType(0) }}>Show Total Harvest</button>
+                                <button className='btn btn-sm ' onClick={() => { setType(1) }}>Show Daily Harvest</button> :
+                                <button className='btn btn-sm ' onClick={() => { setType(0) }}>Show Total Harvest</button>
                             }
                         </div>
                     </div>

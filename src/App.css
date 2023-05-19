@@ -51,7 +51,7 @@ a:hover{
 }
 
 .navbar-brand{
-  width: 15vw;
+  width: 20vw;
 }
 
 .nav-link{
@@ -77,4 +77,33 @@ a:hover{
   position: absolute;
   margin: 5px;
   color: red;
+}
+
+@media (max-width: 425px) {
+  .navbar-brand{
+    width: 50vw;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 991px) {
+  .home-logo{
+    max-width: 95vw;
+  }
+
+  .select-date{
+    width: 60vw;
+  }
+
+  .switch-type-btn{
+    width: fit;
+  }
+
+  .add-veggie{
+    width: 60vw;
+    margin-top: 3vh;
+  }
 }

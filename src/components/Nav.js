@@ -1,6 +1,6 @@
 import React from 'react'
 import Avatar from '@mui/material/Avatar';
-import Logo from '../components/photos/Harvest-Tracker-Logo.png'
+import Logo from '../components/photos/Harvest-Tracker-Logo-2.png'
 
 
 
