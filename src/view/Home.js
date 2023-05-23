@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 import Logo from '../components/photos/Harvest-Tracker-Logo.png'
 
 
-export default function Home({ user, info, setInfo, veggies, setVeggies, date, setDate, totalVeggies, setTotalVeggies, totalVeggieInfo, setTotalVeggieInfo }) {
-
-    const foodAPIKey = process.env.UNSPLASH_API_KEY
+export default function Home({ user, garden, setMessage, info, setInfo, veggies, setVeggies, date, setDate, totalVeggies, setTotalVeggies, totalVeggieInfo, setTotalVeggieInfo }) {
 
     const [type, setType] = useState(1)
+
+
+    const foodAPIKey = process.env.REACT_APP_UNSPLASH_API_KEY
+
+
+
 
     const addVeggie = async (event) => {
         event.preventDefault()
@@ -27,6 +33,11 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
         else {
             copy[v] = [1, ' ', `${data.results[0].urls.full}`]
         }
+
+        // if (garden.includes(v)===false){
+        //     garden.push(v)
+        //     setMessage(`${v} successfully added to garden!`)
+        // }
 
 
         setVeggies(copy)
@@ -73,12 +84,18 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
             let totalVeg = []
             let allVeg = {}
             for (let x in data) {
-                totalVeg.push(data[x].veggies)
+                if (x != 'garden') {
+                    totalVeg.push(data[x].veggies)
+                }
             }
+
+            console.log(totalVeg)
+            console.log(allVeg)
+
             for (let y = 0; y < totalVeg.length; y++) {
                 for (let z in totalVeg[y]) {
                     if (z in allVeg) {
-                        allVeg[z][0]++
+                        allVeg[z][0] += totalVeg[y][z][0]
                     } else {
                         allVeg[z] = totalVeg[y][z]
                     }
@@ -187,14 +204,20 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
                                 {date ? <></> :
                                     <label className='label' for='date'>Select Harvest Date</label>
                                 }
-                                <input className='form-control' id='date' type='date' name='date' />
+                                <TextField className='form-control' id='date' type='date' name='date' />
                             </form>
 
                             {date ? <>
                                 <form className='col-4 add-veggie' onSubmit={addVeggie}>
-                                    <input className='form-control' name="vegatable" placeholder="Vegatable" />
+                                    <Autocomplete
+                                        id="veggies-in-garden"
+                                        options={garden.map((option) => option)}
+                                        noOptionsText="This item is not in your garden."
+                                        renderInput={(params) => <TextField {...params} className='form-control' name='vegatable' label="Vegatable" />}
+                                    />
                                     <button type='submit' className='btn my-3 '>Add Veggie</button>
                                 </form></> : <></>
+
                             }
                         </>
                         }
@@ -226,7 +249,7 @@ export default function Home({ user, info, setInfo, veggies, setVeggies, date, s
                                     <div className='description m-3'>
                                         {n[1][1]}
                                         {n[1][1] != " " ?
-                                            <a onClick={() => { deleteDescription(n[0]) }}><i class="fa-solid fa-trash"></i></a> : <></>
+                                            <a onClick={() => { deleteDescription(n[0]) }}><i class="fa-solid fa-trash harvest-trash"></i></a> : <></>
                                         }
                                     </div>
 
